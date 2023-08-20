@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const PORT = process.env.PORT || 5000;
+const studentRoute = require('./routes/studentRoute')
+const facultyRoute = require('./routes/facultyRoute')
 
 dotenv.config();
 
@@ -17,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use('/uploads', express.static(__dirname + '/uploads'))
 
 // Use the routes
-// app.use('/api/', userRoute);
-// app.use('/api/blog', blogRoute);
+// app.use('/api/student', studentRoute);
+app.use('/api/faculty', facultyRoute);
 
 // Connect to DB
 mongoose.connect(process.env.MONGODB_URI, {
