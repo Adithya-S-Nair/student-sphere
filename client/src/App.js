@@ -14,7 +14,7 @@ const App = () => {
     <>
       <Router>
         <Routes>
-          <Route exact path='/login' element={<Authpage />} />
+          <Route exact path='/auth' element={<Authpage />} />
         </Routes>
       </Router>
     </>
