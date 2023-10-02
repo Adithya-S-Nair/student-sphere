@@ -1,24 +1,33 @@
 const mongoose = require('mongoose');
 
 const attendanceSchema = new mongoose.Schema({
-    student: {
+    batch_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model for students
+        ref: 'Batch',
         required: true,
     },
-    timetable: {
+    subject_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Timetable',
+        ref: 'Subject',
         required: true,
     },
     date: {
         type: Date,
         required: true,
     },
-    isPresent: {
-        type: Boolean,
-        required: true,
-    },
+    students: [
+        {
+            student_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Student',
+                required: true,
+            },
+            attendance_status: {
+                type: Boolean,
+                default:'false'
+            },
+        },
+    ],
 });
 
 const Attendance = mongoose.model('Attendance', attendanceSchema);

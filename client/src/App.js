@@ -7,6 +7,9 @@ import './App.css';
 
 //Pages & Components
 import Authpage from './Pages/Authpage';
+import Attendancepage from './Pages/Attendancepage';
+import Facultyhome from './Pages/Facultyhome';
+import Createbatch from './Pages/Createbatch';
 
 
 const App = () => {
@@ -15,6 +18,9 @@ const App = () => {
       <Router>
         <Routes>
           <Route exact path='/auth' element={<Authpage />} />
+          <Route exact path='/facultyhome' element={<Facultyhome />} />
+          <Route exact path='/createbatch' element={<Createbatch />} />
+          <Route exact path='/attendance' element={<Attendancepage />} />
         </Routes>
       </Router>
     </>

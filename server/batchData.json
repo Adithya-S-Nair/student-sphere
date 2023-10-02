@@ -1,0 +1,41 @@
+{
+    "_id": {
+        "$oid": "651a79a747faf9ae0fa38357"
+    },
+    "day": "Monday",
+    "subjects": [
+        {
+            "subject": {
+                "$oid": "651a76d7eda7d4de9b8d0c48"
+            },
+            "start_time": "08:00 AM",
+            "end_time": "09:30 AM",
+            "_id": {
+                "$oid": "651a79a747faf9ae0fa38358"
+            }
+        },
+        {
+            "subject": {
+                "$oid": "651a77e1eda7d4de9b8d0c49"
+            },
+            "start_time": "09:45 AM",
+            "end_time": "11:15 AM",
+            "_id": {
+                "$oid": "651a79a747faf9ae0fa38359"
+            }
+        },
+        {
+            "subject": {
+                "$oid": "651a783eeda7d4de9b8d0c4a"
+            },
+            "start_time": "11:30 AM",
+            "end_time": "01:00 PM",
+            "_id": {
+                "$oid": "651a79a747faf9ae0fa3835a"
+            }
+        }
+    ],
+    "__v": {
+        "$numberInt": "0"
+    }
+}
