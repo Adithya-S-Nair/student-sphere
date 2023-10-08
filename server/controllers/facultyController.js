@@ -4,7 +4,7 @@ const Batch = require("../models/batchModel");
 const Student = require("../models/studentModel");
 const Timetable = require("../models/timetableModel");
 const Subject = require("../models/subjectModel");
-const Attendance = require("../models/attendanceModel");
+const Marks = require("../models/markSchema");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -140,10 +140,86 @@ const markAttendance = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+const enterMark = async (req, res) => {
+    try {
+        const batch_id = req.body.batch_id; // Replace with the actual batch ID
+        const subject_id = req.body.subject_id; // Replace with the actual subject ID
+        const date = new Date(req.body.date);
+        const studentsData = req.body.students;
+
+        // Create an array to store the mark documents to be inserted
+        const markDocuments = [];
+
+        // Iterate through the studentsData array
+        for (const studentData of studentsData) {
+            const student_id = studentData.student_id; // Replace with the actual student ID
+            const { internal1, internal2, semesterExamMark, assignmentMark } = studentData;
+
+            // Create a new mark document
+            const mark = new Marks({
+                internal1,
+                internal2,
+                semesterExamMark,
+                assignmentMark,
+            });
+
+            // Push the mark document into the array
+            markDocuments.push(mark);
+
+            // Find the student by ID and update their marks
+            await Student.findByIdAndUpdate(
+                student_id,
+                {
+                    $push: {
+                        marks: {
+                            batch_id,
+                            subject_id,
+                            date,
+                            mark: mark._id, // Reference to the newly created mark
+                        },
+                    },
+                },
+                { new: true }
+            );
+        }
+
+        // Insert the mark documents into the Mark collection
+        await Marks.insertMany(markDocuments);
+
+        res.status(201).json({ message: 'Marks entered successfully' });
+    } catch (error) {
+        console.error('Error entering marks:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+const addSubject = (req, res) => {
+    const subject = req.body
+    console.log(subject)
+}
+
+const getAllBatch = (req, res) => {
+    Batch.find().then((response) => {
+        res.status(200).json({ batchData: response })
+    })
+}
+
+const getAllFaculty = (req, res) => {
+    User.find({}, 'username').then((response) => {
+        res.status(200).json({ facultyData: response })
+
+    })
+}
+
 module.exports = {
     registerFaculty,
     loginFaculty,
     createNewBatch,
     markAttendance,
     updateStudentAttendance,
+    enterMark,
+    addSubject,
+    getAllBatch,
+    getAllFaculty
 };

@@ -9,7 +9,7 @@ import './App.css';
 import Authpage from './Pages/Authpage';
 import Attendancepage from './Pages/Attendancepage';
 import Facultyhome from './Pages/Facultyhome';
-import Createbatch from './Pages/Createbatch';
+import AddBatch from './Pages/AddBatch';
 
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
         <Routes>
           <Route exact path='/auth' element={<Authpage />} />
           <Route exact path='/facultyhome' element={<Facultyhome />} />
-          <Route exact path='/createbatch' element={<Createbatch />} />
+          <Route exact path='/addbatch' element={<AddBatch />} />
           <Route exact path='/attendance' element={<Attendancepage />} />
         </Routes>
       </Router>
