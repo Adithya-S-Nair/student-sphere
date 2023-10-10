@@ -16,16 +16,16 @@ const batchSchema = new mongoose.Schema({
     },
     start_date: {
         type: Date,
-        required: true,
+        required: false,
     },
     end_date: {
         type: Date,
-        required: true,
+        required: false,
     },
-    timetable_id: {
+    timetable_ids: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Timetable', // This references the Timetable model
-    },
+    }],
     // You can add any other fields you need for the Batch schema here
 });
 

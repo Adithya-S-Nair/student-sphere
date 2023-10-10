@@ -65,16 +65,44 @@ const createNewBatch = async (req, res) => {
         // Step 1: Insert each student into the Student collection
         const students = await Student.insertMany(studentData);
 
-        // Step 2: Insert the timetable data into the Timetable collection
-        const timetable = new Timetable(timetableData);
-        const savedTimetable = await timetable.save();
+        // Step 2: Create an array to store timetable data
+        const formattedTimetable = [];
 
-        // Step 3: Insert batch data into the Batch collection
+        // Loop through the incoming timetable data
+        for (const dayData of timetableData) {
+            // Validate and sanitize the day data as needed
+            const formattedDay = {
+                day: dayData.day.toLowerCase(), // Use lowercase day name if needed
+                subjects: dayData.subjects.map((subject) => ({
+                    subject: subject.subject.toString(), // Convert subject to string if it's an ObjectId
+                    start_time: subject.start_time,
+                    end_time: subject.end_time,
+                })),
+            };
+            formattedTimetable.push(formattedDay);
+        }
+        const savedTimetableIds = [];
+        console.log(formattedTimetable);
+        for (const dayData of formattedTimetable) {
+            // Create a new Timetable instance for the current day
+            const newTimetable = new Timetable({
+                day: dayData.day, // Set the day from the current dayData
+                subjects: dayData.subjects, // Set the subjects from the current dayData
+            });
+
+            // Save the newTimetable instance to the database
+            const savedTimetable = await newTimetable.save();
+            savedTimetableIds.push(savedTimetable._id);
+
+        }
+        console.log(savedTimetableIds);
+        // Step 4: Insert batch data into the Batch collection
         const batch = new Batch({
             ...batchData,
-            timetable_id: savedTimetable._id,
+            timetable_ids: savedTimetableIds,
             student_ids: students.map((student) => student._id),
         });
+        console.log(batch);
         const savedBatch = await batch.save();
 
         res.status(201).json({ message: 'Batch created successfully' });
@@ -83,6 +111,7 @@ const createNewBatch = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 const updateStudentAttendance = async (studentId, timetableId, subjectId, date, attendanceStatus) => {
     try {
@@ -202,14 +231,27 @@ const addSubject = (req, res) => {
 const getAllBatch = (req, res) => {
     Batch.find().then((response) => {
         res.status(200).json({ batchData: response })
+    }).catch((err) => {
+        res.status(500).json({ msg: err })
     })
 }
 
 const getAllFaculty = (req, res) => {
     User.find({}, 'username').then((response) => {
         res.status(200).json({ facultyData: response })
-
+    }).catch((err) => {
+        res.status(500).json({ msg: err })
     })
+}
+
+const getAllSubjects = (req, res) => {
+    Subject.find({}, 'subject')
+        .then((response) => {
+            res.status(200).json({ subjectData: response })
+        })
+        .catch((err) => {
+            res.status(500).json({ msg: err })
+        })
 }
 
 module.exports = {
@@ -221,5 +263,6 @@ module.exports = {
     enterMark,
     addSubject,
     getAllBatch,
-    getAllFaculty
+    getAllFaculty,
+    getAllSubjects
 };

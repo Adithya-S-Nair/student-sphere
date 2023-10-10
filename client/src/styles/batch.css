@@ -63,3 +63,95 @@ body {
   justify-content: center;
   flex-direction: column;
 }
+
+.step2-container {
+  height: 200px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.step2-textfield {
+  width: 100%;
+  margin-bottom: 20px;
+  gap: 10px;
+  padding: 5.5px 14px;
+}
+
+.card-content .MuiTextField-root+.MuiTextField-root {
+  margin-top: 10px;
+}
+
+
+.step2-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 20px;
+
+}
+
+
+.card {
+  border: 1px solid #f6f5f7;
+  padding: 0px;
+  text-align: center;
+  background-color: #f6f5f7;
+  padding: auto;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+
+.card-content {
+  background-color: #f6f5f7;
+  border: 1px solid #f6f5f7;
+}
+
+
+
+.card-title {
+  font-weight: bold;
+}
+
+
+.card-subtitle {
+  color: #555;
+}
+
+.MuiInputBase-input.MuiOutlinedInput-input.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 16px;
+  background-color: #f6f5f7;
+  color: #333;
+  border-radius: 4px;
+  padding: -22.5px 14px;
+}
+
+.MuiInputBase-input.MuiOutlinedInput-input.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:focus {
+
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.MuiCardContent-root.card-content.css-46bh2p-MuiCardContent-root {
+  padding: 8px;
+  background-color: #f6f5f7;
+  border: 1px solid #f6f5f7;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.MuiGrid-root {
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f5f7;
+  padding: 10px;
+}
+
+
+.MuiGrid-spacing-xs-3 {
+  gap: 1px;
+}
