@@ -38,6 +38,10 @@ const studentSchema = new mongoose.Schema({
     required: true,
   },
   attendance: [attendanceSchema], // Include the attendance field
+  batch_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Batch', // Reference to the Batch model if you have one
+  },
 });
 
 const Student = mongoose.model('Student', studentSchema);

@@ -59,11 +59,13 @@ const Authpage = () => {
     axios.post('http://localhost:5000/api/faculty/login', {
       email: facultyLoginData.email,
       password: facultyLoginData.password
-    }, { withCredentials: true })
+    }, {
+      withCredentials: true
+    })
       .then((response) => {
         if (response.status === 201) {
           setUser({ userId: response.data.id, username: response.data.username, role: response.data.role })
-          navigate('/', { state: { openSnackbar: true } });
+          navigate('/facultyhome', { state: { openSnackbar: true } });
         }
       })
       .catch((error) => {
@@ -75,7 +77,7 @@ const Authpage = () => {
 
   return (
     <div className="container p-5">
-      <MDBContainer className="p-3 my-5 d-flex flex-column w-50">
+      <MDBContainer className="p-3 my-5 d-flex flex-column">
 
         <MDBTabs pills justify className='mb-3 d-flex flex-row justify-content-between'>
           <MDBTabsItem>
@@ -136,7 +138,7 @@ const Authpage = () => {
                 name='password'
                 value={facultyLoginData.password}
                 onChange={handleFacultyLoginInputs} />
-              <div className="d-flex justify-content-between mx-4 mb-4">
+              <div className="d-flex justify-content-between mx-4 mb-4 gap-5">
                 <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' checked />
                 <a href="!#">Forgot password?</a>
               </div>

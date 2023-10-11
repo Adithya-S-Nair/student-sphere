@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import '../styles/Timetable.css';
 import { Card as MuiCard, CardContent, } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 
 const periods = [
     { name: 'Period 1', start_time: '08:00 AM', end_time: '09:30 AM' },
@@ -104,13 +105,13 @@ function AddBatch() {
     const formattedTimetable = rearrangedDays.map((day, dayIndex) => ({
         day: day.toLowerCase(), // Use lowercase day name if needed
         subjects: periods.map((period, periodIndex) => ({
-          subject: timetable[dayIndex][periodIndex].subject.toString(), // Convert subject to string if it's an ObjectId
-          start_time: period.start_time,
-          end_time: period.end_time,
+            subject: timetable[dayIndex][periodIndex].subject.toString(), // Convert subject to string if it's an ObjectId
+            start_time: period.start_time,
+            end_time: period.end_time,
         })),
-      }));
-      
-      console.log(formattedTimetable);
+    }));
+
+    console.log(formattedTimetable);
     const handleFinish = () => {
         console.log(formData);
         axios.post('http://localhost:5000/api/faculty/newbatch', {
@@ -187,7 +188,7 @@ function Step1({ batchData, facultyData, formData, setFormData }) {
 
     return (
         <div className="step-content">
-            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            {/* <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                 <InputLabel id="demo-simple-select-label">Department Name</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -197,10 +198,18 @@ function Step1({ batchData, facultyData, formData, setFormData }) {
                     onChange={handleChange}
                 >
                     {batchData && batchData.map((batch) => (
-                        <MenuItem key={batch._id} value={batch._id}>{batch.course}</MenuItem>
+                        <MenuItem key={batch._id} value={batch.course}>{batch.course}</MenuItem>
                     ))}
                 </Select>
-            </FormControl>
+            </FormControl> */}
+            {console.log(batchData)}
+            <Autocomplete
+                id="combo-box-demo"
+                options={batchData && Array.isArray(batchData.course) ? batchData.course : []}
+                disablePortal
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Course" name="course" onChange={handleChange}/>}
+            />
 
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                 <InputLabel id="demo-select-small-label">Semester</InputLabel>
@@ -211,9 +220,16 @@ function Step1({ batchData, facultyData, formData, setFormData }) {
                     name="semester"
                     onChange={handleChange}
                 >
-                    {batchData && batchData.map((batch) => (
-                        <MenuItem key={batch._id} value={batch._id}>{batch.semester}</MenuItem>
-                    ))}
+                    <MenuItem value="S1">S1</MenuItem>
+                    <MenuItem value="S2">S2</MenuItem>
+                    <MenuItem value="S3">S3</MenuItem>
+                    <MenuItem value="S4">S4</MenuItem>
+                    <MenuItem value="S5">S5</MenuItem>
+                    <MenuItem value="S6">S6</MenuItem>
+                    <MenuItem value="S7">S7</MenuItem>
+                    <MenuItem value="S8">S8</MenuItem>
+                    <MenuItem value="S9">S9</MenuItem>
+                    <MenuItem value="S10">S10</MenuItem>
                 </Select>
             </FormControl>
 

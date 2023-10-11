@@ -10,6 +10,7 @@ import Authpage from './Pages/Authpage';
 import Attendancepage from './Pages/Attendancepage';
 import Facultyhome from './Pages/Facultyhome';
 import AddBatch from './Pages/AddBatch';
+import MarkManagement from './Pages/MarkManagement';
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
           <Route exact path='/facultyhome' element={<Facultyhome />} />
           <Route exact path='/addbatch' element={<AddBatch />} />
           <Route exact path='/attendance' element={<Attendancepage />} />
+          <Route exact path='/entermark' element={<MarkManagement />} />
         </Routes>
       </Router>
     </>

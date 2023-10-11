@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Use the routes
 // app.use('/api/student', studentRoute);
 app.use('/api/faculty', facultyRoute);
+app.use('/api/student', studentRoute);
 
 // Connect to DB
 mongoose.connect(process.env.MONGODB_URI, {

@@ -29,7 +29,6 @@ const loginFaculty = async (req, res) => {
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
-
 }
 
 const registerFaculty = async (req, res) => {
@@ -61,10 +60,10 @@ const createNewBatch = async (req, res) => {
         const studentData = req.body.studentData;
         const timetableData = req.body.timetableData;
         const batchData = req.body.batchData;
-
+        console.log(batchData);
         // Step 1: Insert each student into the Student collection
         const students = await Student.insertMany(studentData);
-
+        console.log(students);
         // Step 2: Create an array to store timetable data
         const formattedTimetable = [];
 
@@ -104,6 +103,12 @@ const createNewBatch = async (req, res) => {
         });
         console.log(batch);
         const savedBatch = await batch.save();
+        const batchId = savedBatch._id;
+
+        // Update each student's record with the batchId
+        for (const student of students) {
+            await Student.updateOne({ _id: student._id }, { $set: { batch_id: batchId } });
+        }
 
         res.status(201).json({ message: 'Batch created successfully' });
     } catch (error) {
@@ -171,57 +176,28 @@ const markAttendance = async (req, res) => {
 };
 
 const enterMark = async (req, res) => {
+    const markData = req.body;
+
     try {
-        const batch_id = req.body.batch_id; // Replace with the actual batch ID
-        const subject_id = req.body.subject_id; // Replace with the actual subject ID
-        const date = new Date(req.body.date);
-        const studentsData = req.body.students;
-
-        // Create an array to store the mark documents to be inserted
-        const markDocuments = [];
-
-        // Iterate through the studentsData array
-        for (const studentData of studentsData) {
-            const student_id = studentData.student_id; // Replace with the actual student ID
-            const { internal1, internal2, semesterExamMark, assignmentMark } = studentData;
-
-            // Create a new mark document
-            const mark = new Marks({
-                internal1,
-                internal2,
-                semesterExamMark,
-                assignmentMark,
+        for (const mark of markData) {
+            const { studentId, internalMark1, internalMark2, assignmentMark1, assignmentMark2 } = mark;
+            const newMark = new Marks({
+                student_id:studentId,
+                internalMark1,
+                internalMark2,
+                assignmentMark1,
+                assignmentMark2,
             });
-
-            // Push the mark document into the array
-            markDocuments.push(mark);
-
-            // Find the student by ID and update their marks
-            await Student.findByIdAndUpdate(
-                student_id,
-                {
-                    $push: {
-                        marks: {
-                            batch_id,
-                            subject_id,
-                            date,
-                            mark: mark._id, // Reference to the newly created mark
-                        },
-                    },
-                },
-                { new: true }
-            );
+            await newMark.save();
         }
 
-        // Insert the mark documents into the Mark collection
-        await Marks.insertMany(markDocuments);
-
-        res.status(201).json({ message: 'Marks entered successfully' });
+        res.status(200).json({ message: 'Marks inserted successfully' });
     } catch (error) {
-        console.error('Error entering marks:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error inserting marks:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 const addSubject = (req, res) => {
     const subject = req.body
