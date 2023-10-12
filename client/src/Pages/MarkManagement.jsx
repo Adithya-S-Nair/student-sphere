@@ -120,7 +120,7 @@ const MarkManagement = () => {
             .post('http://localhost:5000/api/faculty/entermark', marksToPublish)
             .then((res) => {
                 // Handle success
-                console.log('Marks published successfully');
+                alert('Marks published successfully');
                 // Optionally, you can reset the marksData state or perform other actions here.
             })
             .catch((error) => {

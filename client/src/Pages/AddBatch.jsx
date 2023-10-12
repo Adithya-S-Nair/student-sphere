@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -21,6 +22,7 @@ const periods = [
 ];
 
 function AddBatch() {
+    const navigate = useNavigate()
     const [batchData, setBatchData] = useState(null)
     const [facultyData, setFacultyData] = useState(null)
     const [subjectData, setSubjectData] = useState(null);
@@ -121,9 +123,11 @@ function AddBatch() {
         })
             .then(() => {
                 console.log('success');
+                navigate('/facultyhome')
             })
             .catch(() => {
                 console.log('failed');
+                alert('Something Went Wrong')
             })
     }
 
@@ -177,7 +181,6 @@ function AddBatch() {
 }
 
 function Step1({ batchData, facultyData, formData, setFormData }) {
-    console.log(formData);
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -204,11 +207,12 @@ function Step1({ batchData, facultyData, formData, setFormData }) {
             </FormControl> */}
             {console.log(batchData)}
             <Autocomplete
+                value={formData.course}
                 id="combo-box-demo"
                 options={batchData && Array.isArray(batchData.course) ? batchData.course : []}
                 disablePortal
                 sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Course" name="course" onChange={handleChange}/>}
+                renderInput={(params) => <TextField {...params} value={formData.course} label="Course" name="course" onChange={handleChange} />}
             />
 
             <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -252,22 +256,22 @@ function Step1({ batchData, facultyData, formData, setFormData }) {
                     )}
                 </Select>
             </FormControl>
+            {/* <input type='date'
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Start Date"
+                name="start_date"
+                onChange={handleChange}
+            />
+            <input type='date'
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="End Date"
+                name="start_date"
+                onChange={handleChange}
+            /> */}
 
-            <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
-                <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Age"
-                    name="start_date"
-                    onChange={handleChange}
-                >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+            {/* <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
                 <InputLabel id="demo-simple-select-label">Age</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -280,7 +284,7 @@ function Step1({ batchData, facultyData, formData, setFormData }) {
                     <MenuItem value={20}>Twenty</MenuItem>
                     <MenuItem value={30}>Thirty</MenuItem>
                 </Select>
-            </FormControl>
+            </FormControl> */}
         </div >
     );
 }

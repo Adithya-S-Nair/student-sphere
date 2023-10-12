@@ -11,6 +11,7 @@ import Attendancepage from './Pages/Attendancepage';
 import Facultyhome from './Pages/Facultyhome';
 import AddBatch from './Pages/AddBatch';
 import MarkManagement from './Pages/MarkManagement';
+import Studenthome from './Pages/Studenthome';
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
           <Route exact path='/addbatch' element={<AddBatch />} />
           <Route exact path='/attendance' element={<Attendancepage />} />
           <Route exact path='/entermark' element={<MarkManagement />} />
+          <Route exact path='/studenthome' element={<Studenthome />} />
         </Routes>
       </Router>
     </>

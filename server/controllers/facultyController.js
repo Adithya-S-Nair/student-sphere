@@ -24,7 +24,7 @@ const loginFaculty = async (req, res) => {
         jwt.sign({ userId: userData._id, username: userData.username, role: userData.role }, process.env.JWT_SECRET, (err, token) => {
             if (err)
                 throw err
-            res.cookie('token', token).status(201).json({ id: userData._id, username: userData.username });
+            res.cookie('token', token).status(201).json({ id: userData._id, username: userData.username, role: userData.role });
         })
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -62,8 +62,20 @@ const createNewBatch = async (req, res) => {
         const batchData = req.body.batchData;
         console.log(batchData);
         // Step 1: Insert each student into the Student collection
-        const students = await Student.insertMany(studentData);
-        console.log(students);
+        const studentsWithHashedPasswords = await Promise.all(
+            studentData.map(async (student) => {
+                const hashedPassword = await bcrypt.hash(student.password, 10); // Hash the password with a salt round of 10
+                return {
+                    ...student,
+                    password: hashedPassword, // Replace the password with the hashed password
+                };
+            })
+        );
+
+        // Insert the students with hashed passwords
+        const students = await Student.insertMany(studentsWithHashedPasswords);
+        // const students = await Student.insertMany(studentData);
+
         // Step 2: Create an array to store timetable data
         const formattedTimetable = [];
 
@@ -182,7 +194,7 @@ const enterMark = async (req, res) => {
         for (const mark of markData) {
             const { studentId, internalMark1, internalMark2, assignmentMark1, assignmentMark2 } = mark;
             const newMark = new Marks({
-                student_id:studentId,
+                student_id: studentId,
                 internalMark1,
                 internalMark2,
                 assignmentMark1,

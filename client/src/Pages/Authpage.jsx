@@ -21,7 +21,7 @@ const Authpage = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [justifyActive, setJustifyActive] = useState('tab1');;
-  const [studentLoginData, setStudentLoginData] = useState({ email: "", password: "" });
+  const [studentLoginData, setStudentLoginData] = useState({ username: "", password: "" });
   const [facultyLoginData, setFacultyLoginData] = useState({ email: "", password: "" });
   const message = (
     <div className='d-flex gap-1 align-items-center text-danger'>
@@ -31,7 +31,11 @@ const Authpage = () => {
       <span>Invalid Credentials</span>
     </div>
   )
-
+  useEffect(() => {
+    if (user) {
+      navigate('/facultyhome')
+    }
+  }, []);
   const handleJustifyClick = (value) => {
     if (value === justifyActive) {
       return;
@@ -48,10 +52,24 @@ const Authpage = () => {
     let { name, value } = e.target;
     setFacultyLoginData({ ...facultyLoginData, [name]: value })
   }
-
+  console.log(user);
   const handleStudentLogin = (ev) => {
     ev.preventDefault();
-    console.log(studentLoginData);
+    axios.post('http://localhost:5000/api/student/login', studentLoginData, {
+      withCredentials: true
+    })
+      .then((response) => {
+        console.log(response.data.user._id);
+        if (response.status === 200 && response.data.user) {
+          setUser({ userId: response.data.user._id, username: response.data.user.name })
+          console.log(user);
+          navigate(`/studenthome?id=${response.data.user._id}`, { state: { openSnackbar: true } });
+        }
+      })
+      .catch((error) => {
+        setOpen(true)
+        console.log(error);
+      });
   }
 
   const handleFacultyLogin = (ev) => {
@@ -64,6 +82,7 @@ const Authpage = () => {
     })
       .then((response) => {
         if (response.status === 201) {
+          console.log(response);
           setUser({ userId: response.data.id, username: response.data.username, role: response.data.role })
           navigate('/facultyhome', { state: { openSnackbar: true } });
         }
@@ -98,10 +117,10 @@ const Authpage = () => {
             <form onSubmit={handleStudentLogin}>
               <MDBInput
                 wrapperClass='mb-4'
-                label='Email address'
+                label='User Name'
                 id='form1'
-                type='email'
-                name='email'
+                type='text'
+                name='username'
                 value={studentLoginData.email}
                 onChange={handleStudentLoginInputs} />
               <MDBInput
@@ -112,7 +131,7 @@ const Authpage = () => {
                 name='password'
                 value={studentLoginData.password}
                 onChange={handleStudentLoginInputs} />
-              <div className="d-flex justify-content-between mx-4 mb-4">
+              <div className="d-flex justify-content-between mx-4 mb-4 gap-5">
                 <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' checked />
                 <a href="!#">Forgot password?</a>
               </div>
